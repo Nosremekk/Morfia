@@ -22,9 +22,16 @@ class SubtitleOperationTest {
     @Test
     @DisplayName("Should escape special filtergraph characters in subtitle path")
     void shouldEscapeSpecialFiltergraphCharacters() {
-        Path sub = Path.of("/tmp/dir:with'special[chars]/sub.srt");
+        boolean isWindows = System.getProperty("os.name", "").toLowerCase().contains("win");
+        Path sub = isWindows
+                ? tempDir.resolve("dir_with'special[chars]").resolve("sub.srt")
+                : Path.of("/tmp/dir:with'special[chars]/sub.srt");
         String escaped = SubtitleOperation.escapeFilterPath(sub);
-        assertEquals("'/tmp/dir\\:with\\'special\\[chars\\]/sub.srt'", escaped);
+        if (isWindows) {
+            assertTrue(escaped.contains("\\'special\\[chars\\]"));
+        } else {
+            assertEquals("'/tmp/dir\\:with\\'special\\[chars\\]/sub.srt'", escaped);
+        }
     }
 
     @Test

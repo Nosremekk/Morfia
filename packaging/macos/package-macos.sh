@@ -7,7 +7,8 @@ set -euo pipefail
 PRODUCT_NAME="morfia"
 DISPLAY_NAME="Morfia"
 SEMVER_VERSION="1.0.0-rc.1"
-JPACKAGE_VERSION="0.99.1"
+# macOS jpackage requires first version component >= 1
+JPACKAGE_VERSION="1.0.0"
 MAIN_CLASS="com.ffmpegstudio.ui.Launcher"
 MAIN_JAR="morfia-${SEMVER_VERSION}.jar"
 VENDOR="Emerson Vinicius Santos de Santana"

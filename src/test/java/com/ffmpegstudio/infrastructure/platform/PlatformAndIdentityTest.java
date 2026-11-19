@@ -131,12 +131,12 @@ class PlatformAndIdentityTest {
             assertEquals(ExecutableResolver.ResolutionSource.EXPLICIT_CONFIG, resExplicit.get().source());
             assertEquals(explicitFfmpeg.toAbsolutePath().normalize(), resExplicit.get().path());
 
-            // /tmp in PATH is rejected; safeBinDir in PATH is selected
+            // system tmpdir is rejected; safeBinDir in PATH is selected
             Optional<ExecutableResolver.ResolvedExecutable> resPath = resolver.resolve("mock-ffmpeg", null);
             assertTrue(resPath.isPresent());
             assertEquals(ExecutableResolver.ResolutionSource.SYSTEM_PATH, resPath.get().source());
             assertEquals(safeFfmpeg.toAbsolutePath().normalize(), resPath.get().path());
-            assertTrue(ExecutableResolver.isUntrustedAutoDiscoveryDir(Path.of("/tmp")));
+            assertTrue(ExecutableResolver.isUntrustedAutoDiscoveryDir(Path.of(System.getProperty("java.io.tmpdir"))));
         } finally {
             try (var walk = Files.walk(workspaceTmp)) {
                 walk.sorted(java.util.Comparator.reverseOrder()).forEach(p -> p.toFile().delete());

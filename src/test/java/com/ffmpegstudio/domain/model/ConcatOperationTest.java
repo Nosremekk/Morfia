@@ -22,9 +22,10 @@ class ConcatOperationTest {
     @Test
     @DisplayName("Should escape single quotes and spaces for concat demuxer list file")
     void shouldEscapeSingleQuotesAndSpaces() {
-        Path p = Path.of("/tmp/my 'special' video.mp4");
+        Path p = tempDir.resolve("my 'special' video.mp4");
         String escaped = ConcatOperation.escapeConcatDemuxerPath(p);
-        assertEquals("'/tmp/my '\\''special'\\'' video.mp4'", escaped);
+        String expected = "'" + p.toAbsolutePath().normalize().toString().replace("\\", "/").replace("'", "'\\''") + "'";
+        assertEquals(expected, escaped);
     }
 
     @Test
