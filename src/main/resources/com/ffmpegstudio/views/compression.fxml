@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" styleClass="content-area"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.ffmpegstudio.ui.controller.CompressionController">
+
+    <VBox spacing="20">
+        <!-- Header -->
+        <VBox styleClass="view-header" spacing="4">
+            <Label text="Compressão de Vídeo" styleClass="view-title"/>
+            <Label text="Otimize o tamanho de arquivos de mídia preservando fidelidade visual através de CRF dinâmico e codecs eficientes."
+                   styleClass="view-subtitle"/>
+        </VBox>
+
+        <VBox spacing="20" styleClass="view-body">
+
+            <!-- File Drop / Source Card -->
+            <VBox fx:id="dropZone" styleClass="dropzone" spacing="12">
+                <VBox alignment="CENTER" spacing="6">
+                    <Label text="Arraste e solte o arquivo de vídeo aqui" styleClass="dropzone-title"/>
+                    <Label text="ou clique para navegar pelos diretórios do sistema" styleClass="dropzone-subtitle"/>
+                </VBox>
+                <HBox alignment="CENTER" spacing="10">
+                    <Button fx:id="btnSelectFile" text="Selecionar Vídeo..." onAction="#handleSelectFile" styleClass="button-outline"/>
+                </HBox>
+            </VBox>
+
+            <!-- Media Info Card -->
+            <VBox fx:id="mediaInfoCard" styleClass="card" spacing="12" visible="false" managed="false">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label fx:id="lblFileName" text="video.mp4" styleClass="card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="Tamanho Original:" styleClass="text-secondary"/>
+                    <Label fx:id="lblOriginalSize" text="-" styleClass="badge, badge-neutral"/>
+                </HBox>
+                <HBox spacing="24">
+                    <VBox spacing="4">
+                        <Label text="Resolução:" styleClass="text-muted"/>
+                        <Label fx:id="lblMediaResolution" text="-" styleClass="text-primary"/>
+                    </VBox>
+                    <VBox spacing="4">
+                        <Label text="Duração:" styleClass="text-muted"/>
+                        <Label fx:id="lblMediaDuration" text="-" styleClass="text-primary"/>
+                    </VBox>
+                    <VBox spacing="4">
+                        <Label text="Codec Vídeo:" styleClass="text-muted"/>
+                        <Label fx:id="lblMediaVideoCodec" text="-" styleClass="text-primary"/>
+                    </VBox>
+                    <VBox spacing="4">
+                        <Label text="Codec Áudio:" styleClass="text-muted"/>
+                        <Label fx:id="lblMediaAudioCodec" text="-" styleClass="text-primary"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Compression Configuration Card -->
+            <VBox styleClass="card" spacing="18">
+                <Label text="Parâmetros de Compressão" styleClass="card-title"/>
+
+                <!-- Profile Buttons -->
+                <VBox spacing="8">
+                    <Label text="Perfil Predefinido:" styleClass="text-secondary"/>
+                    <HBox spacing="10">
+                        <Button fx:id="btnProfileLight" text="Leve (Alta Qualidade, CRF 22)" onAction="#handleProfileLight" styleClass="button-outline"/>
+                        <Button fx:id="btnProfileBalanced" text="Equilibrado (Recomendado, CRF 26)" onAction="#handleProfileBalanced" styleClass="button-primary"/>
+                        <Button fx:id="btnProfileAggressive" text="Agressivo (Maior Compactação, CRF 30)" onAction="#handleProfileAggressive" styleClass="button-outline"/>
+                    </HBox>
+                </VBox>
+
+                <!-- CRF Slider -->
+                <VBox spacing="6">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="Fator de Taxa Constante (CRF):" styleClass="text-secondary"/>
+                        <Label fx:id="lblCrfValue" text="26" styleClass="badge, badge-info"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="Valores maiores = menor tamanho e menor qualidade (Padrão: 23-28)" styleClass="text-muted"/>
+                    </HBox>
+                    <Slider fx:id="sliderCrf" min="16" max="38" value="26" blockIncrement="1" majorTickUnit="4" showTickMarks="true"/>
+                </VBox>
+
+                <!-- Grid of Advanced Options -->
+                <HBox spacing="16">
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Codec de Vídeo:" styleClass="text-secondary"/>
+                        <ComboBox fx:id="cmbVideoCodec" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Velocidade de Codificação:" styleClass="text-secondary"/>
+                        <ComboBox fx:id="cmbSpeed" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Redimensionar Resolução:" styleClass="text-secondary"/>
+                        <ComboBox fx:id="cmbResolution" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Taxa de Áudio (AAC):" styleClass="text-secondary"/>
+                        <ComboBox fx:id="cmbAudioBitrate" maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Informational Callout -->
+                <VBox styleClass="callout, callout-info" spacing="4">
+                    <Label text="Nota sobre o tamanho final:" style="-fx-font-weight: bold; -fx-text-fill: #a5b4fc;"/>
+                    <Label text="A codificação baseada em CRF não garante um tamanho final em MB exato, pois aloca mais bits dinamicamente para trechos com maior movimento ou detalhes finos e menos bits para cenas estáticas."
+                           styleClass="text-secondary" wrapText="true"/>
+                </VBox>
+            </VBox>
+
+            <!-- Destination File Card -->
+            <VBox styleClass="card" spacing="10">
+                <Label text="Arquivo de Destino" styleClass="card-title"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <TextField fx:id="txtOutputPath" HBox.hgrow="ALWAYS" promptText="Caminho do arquivo comprimido..."/>
+                    <Button text="Alterar..." onAction="#handleBrowseOutput" styleClass="button-outline"/>
+                </HBox>
+            </VBox>
+
+            <!-- Command Preview Card -->
+            <VBox styleClass="card" spacing="8">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Comando FFmpeg Equivalente" styleClass="card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="Execução segura e estruturada" styleClass="text-muted"/>
+                </HBox>
+                <TextField fx:id="txtCommandPreview" editable="false" style="-fx-font-family: monospace; -fx-font-size: 11px;"/>
+            </VBox>
+
+            <!-- Progress & Results Card -->
+            <VBox fx:id="progressCard" styleClass="card" spacing="12" visible="false" managed="false">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label fx:id="lblProgressTitle" text="Status do Processamento" styleClass="card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="lblFps" text="-" styleClass="badge"/>
+                    <Label fx:id="lblSpeed" text="-" styleClass="badge"/>
+                </HBox>
+                <ProgressBar fx:id="progressBar" maxWidth="Infinity" progress="0.0"/>
+                <Label fx:id="lblStatus" text="Pronto." styleClass="text-secondary"/>
+
+                <!-- Completed Result Comparison -->
+                <HBox fx:id="resultBox" spacing="20" alignment="CENTER_LEFT" visible="false" managed="false">
+                    <VBox spacing="2">
+                        <Label text="Tamanho Original:" styleClass="text-muted"/>
+                        <Label fx:id="lblResultOriginalSize" text="-" styleClass="text-primary"/>
+                    </VBox>
+                    <Label text="➔" styleClass="text-muted"/>
+                    <VBox spacing="2">
+                        <Label text="Tamanho Comprimido:" styleClass="text-muted"/>
+                        <Label fx:id="lblResultFinalSize" text="-" styleClass="text-primary"/>
+                    </VBox>
+                    <Label fx:id="lblResultRatio" text="-50%" styleClass="badge, badge-success" style="-fx-font-size: 13px; -fx-padding: 4 10;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Abrir Pasta..." onAction="#handleOpenOutputFolder" styleClass="button-outline"/>
+                </HBox>
+            </VBox>
+
+            <!-- Actions Bar -->
+            <HBox spacing="12" alignment="CENTER_RIGHT">
+                <Label fx:id="lblGlobalStatus" text="" styleClass="text-secondary"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnAddToQueue" text="Adicionar à Fila" onAction="#handleAddToQueue" styleClass="button-outline"/>
+                <Button fx:id="btnCancel" text="Cancelar" onAction="#handleCancel" styleClass="button-danger" visible="false" managed="false"/>
+                <Button fx:id="btnCompress" text="Comprimir Agora" onAction="#handleCompress" styleClass="button-primary"/>
+            </HBox>
+
+        </VBox>
+    </VBox>
+</ScrollPane>

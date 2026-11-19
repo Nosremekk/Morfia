@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" styleClass="content-area"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.ffmpegstudio.ui.controller.FiltersController">
+
+    <VBox spacing="16">
+        <VBox styleClass="view-header" spacing="4">
+            <Label text="Motor de Filtros e Pré-visualização" styleClass="view-title"/>
+            <Label text="Componha cadeias ordenadas de filtros geométricos, de imagem, temporais e de áudio com prévia antes/depois."
+                   styleClass="view-subtitle"/>
+        </VBox>
+
+        <VBox spacing="16" styleClass="view-body">
+
+            <!-- Media Selection -->
+            <HBox styleClass="card" spacing="12" alignment="CENTER_LEFT">
+                <Button text="Selecionar Mídia..." onAction="#handleSelectMedia" styleClass="button-outline"/>
+                <Label fx:id="lblMediaName" text="Nenhum arquivo selecionado" styleClass="card-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblImpact" text="-" styleClass="badge, badge-info"/>
+            </HBox>
+
+            <!-- Before / After Frame Preview -->
+            <VBox styleClass="card" spacing="12">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="Pré-visualização (Antes vs Depois)" styleClass="card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="Timestamp (s):" styleClass="text-secondary"/>
+                    <Label fx:id="lblTimestamp" text="0.0s" styleClass="badge, badge-neutral"/>
+                </HBox>
+                <Slider fx:id="sliderTimestamp" min="0" max="10" value="0" blockIncrement="0.5"/>
+                <HBox spacing="16" alignment="CENTER">
+                    <VBox spacing="6" alignment="CENTER" HBox.hgrow="ALWAYS">
+                        <Label text="Original" styleClass="text-muted"/>
+                        <ImageView fx:id="imgBefore" fitWidth="360" fitHeight="202" preserveRatio="true"/>
+                    </VBox>
+                    <VBox spacing="6" alignment="CENTER" HBox.hgrow="ALWAYS">
+                        <Label text="Com Filtros Aplicados" styleClass="text-muted"/>
+                        <ImageView fx:id="imgAfter" fitWidth="360" fitHeight="202" preserveRatio="true"/>
+                    </VBox>
+                </HBox>
+                <Label fx:id="lblPreviewNotice" text="" styleClass="text-secondary" wrapText="true"/>
+            </VBox>
+
+            <!-- Add Filter Controls -->
+            <VBox styleClass="card" spacing="12">
+                <Label text="Adicionar Filtro à Cadeia" styleClass="card-title"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <ComboBox fx:id="cmbFilterPreset" prefWidth="260"/>
+                    <TextField fx:id="txtParam1" promptText="Param 1 (ex: 1280)" prefWidth="130"/>
+                    <TextField fx:id="txtParam2" promptText="Param 2 (ex: 720)" prefWidth="130"/>
+                    <TextField fx:id="txtParam3" promptText="Param 3 (x/st)" prefWidth="110"/>
+                    <TextField fx:id="txtParam4" promptText="Param 4 (y/d)" prefWidth="110"/>
+                    <Button text="Adicionar" onAction="#handleAddFilter" styleClass="button-primary"/>
+                </HBox>
+                <Label fx:id="lblParamHint" text="Dica: Resize usa Largura; Crop usa Largura, Altura, X, Y; Cor usa Brilho, Contraste, Saturação, Gamma."
+                       styleClass="text-muted"/>
+            </VBox>
+
+            <!-- Active Ordered Filter Chain -->
+            <VBox styleClass="card" spacing="10">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Cadeia de Filtros Ativa (Ordem de Execução)" styleClass="card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Limpar Todos" onAction="#handleClearFilters" styleClass="button-outline"/>
+                </HBox>
+                <ListView fx:id="lvFilterChain" prefHeight="170" styleClass="list-view"/>
+                <Label fx:id="lblValidation" text="" styleClass="text-secondary" wrapText="true"/>
+            </VBox>
+
+            <!-- Output & Execute -->
+            <VBox styleClass="card" spacing="10">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Destino:" styleClass="text-secondary"/>
+                    <TextField fx:id="txtOutputPath" HBox.hgrow="ALWAYS"/>
+                    <Button text="Alterar..." onAction="#handleBrowseOutput" styleClass="button-outline"/>
+                </HBox>
+                <ProgressBar fx:id="progressBar" maxWidth="Infinity" progress="0.0"/>
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <Label fx:id="lblStatus" text="Pronto." styleClass="text-secondary"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnCancel" text="Cancelar" onAction="#handleCancel" styleClass="button-danger" visible="false" managed="false"/>
+                    <Button fx:id="btnQueue" text="Adicionar à Fila" onAction="#handleAddToQueue" styleClass="button-outline"/>
+                    <Button fx:id="btnExecute" text="Aplicar Filtros" onAction="#handleExecute" styleClass="button-primary"/>
+                </HBox>
+            </VBox>
+
+        </VBox>
+    </VBox>
+</ScrollPane>

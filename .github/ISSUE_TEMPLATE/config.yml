@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Política de Segurança (Vulnerabilidades)
+    url: https://github.com/Nosremekk/Morfia/security/advisories/new
+    about: Não abra issues públicas para falhas de segurança. Use GitHub Security Advisories.

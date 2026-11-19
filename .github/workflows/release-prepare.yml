@@ -1,0 +1,35 @@
+name: Release Prepare (Manual Verification Only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Versão SemVer da release candidate (ex.: 1.0.0-rc.1)'
+        required: true
+        default: '1.0.0-rc.1'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-hygiene-and-build:
+    name: Pre-Release Verification
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Repo Hygiene Check
+        run: |
+          chmod +x scripts/verify-repo-hygiene.sh
+          ./scripts/verify-repo-hygiene.sh
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Compile & Package Verification
+        run: mvn -B clean package -DskipTests

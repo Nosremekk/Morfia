@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Morfia Monochrome Light Logo">
+  <rect x="16" y="16" width="224" height="224" rx="18" fill="none" stroke="#EAEFE5" stroke-width="10"/>
+  <path d="M56 188 V68 H86 L128 126 L170 68 H200 V188 H172 V116 L128 174 L84 116 V188 Z" fill="#EAEFE5"/>
+  <rect x="56" y="196" width="144" height="10" rx="2" fill="#EAEFE5"/>
+</svg>

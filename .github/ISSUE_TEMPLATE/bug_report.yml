@@ -1,0 +1,40 @@
+name: Bug Report
+description: Relatar um problema ou comportamento inesperado
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value:Obrigado por ajudar a melhorar o projeto! Preencha os detalhes abaixo.
+  - type: dropdown
+    id: os
+    attributes:
+      label: Sistema Operacional
+      options:
+        - Linux (Fedora)
+        - Linux (Ubuntu / Debian)
+        - Linux (Outro)
+        - Windows (x86_64)
+        - macOS (Apple Silicon arm64)
+        - macOS (Intel x86_64)
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versão do Aplicativo e FFmpeg
+      placeholder: "Ex.: 1.0.0-rc.1 | FFmpeg 7.1 | Java 25"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrição e Passos para Reproduzir
+      placeholder: Descreva o que aconteceu e os passos exatos para reproduzir.
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Relatório de Diagnóstico Local (Opcional — remova caminhos pessoais se desejar)
+      render: text

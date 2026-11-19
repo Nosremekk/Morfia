@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" styleClass="content-area"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.ffmpegstudio.ui.controller.ConcatController">
+
+    <VBox spacing="16">
+        <VBox styleClass="view-header" spacing="4">
+            <Label text="Concatenação de Mídias" styleClass="view-title"/>
+            <Label text="Una múltiplos vídeos ou arquivos de áudio em sequência via Stream Copy ou normalização automática."
+                   styleClass="view-subtitle"/>
+        </VBox>
+
+        <VBox spacing="16" styleClass="view-body">
+
+            <!-- Clips List & Drag-and-Drop -->
+            <VBox fx:id="clipsCard" styleClass="card" spacing="12">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Clipes na Sequência" styleClass="card-title"/>
+                    <Label fx:id="lblTotalDuration" text="00:00:00" styleClass="badge, badge-info"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Adicionar Clipes..." onAction="#handleAddClips" styleClass="button-primary"/>
+                    <Button text="Limpar" onAction="#handleClearClips" styleClass="button-outline"/>
+                </HBox>
+                <Label text="Arraste e solte arquivos aqui para adicioná-los à sequência." styleClass="text-muted"/>
+                <ListView fx:id="lvClips" prefHeight="240" styleClass="list-view"/>
+            </VBox>
+
+            <!-- Strategy & Output Settings -->
+            <VBox styleClass="card" spacing="14">
+                <Label text="Estratégia e Destino" styleClass="card-title"/>
+                <HBox spacing="16">
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Modo de Concatenação:" styleClass="text-secondary"/>
+                        <ComboBox fx:id="cmbMode" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="6" prefWidth="150">
+                        <Label text="Contêiner:" styleClass="text-secondary"/>
+                        <ComboBox fx:id="cmbContainer" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="6" prefWidth="200">
+                        <Label text="Resolução Alvo (Compatível):" styleClass="text-secondary"/>
+                        <ComboBox fx:id="cmbResolution" maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+
+                <VBox fx:id="compatBox" styleClass="callout, callout-info" spacing="4">
+                    <Label fx:id="lblCompatibility" text="Adicione 2 ou mais clipes." styleClass="text-secondary" wrapText="true"/>
+                </VBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Destino:" styleClass="text-secondary"/>
+                    <TextField fx:id="txtOutputPath" HBox.hgrow="ALWAYS" promptText="Caminho do arquivo final..."/>
+                    <Button text="Alterar..." onAction="#handleBrowseOutput" styleClass="button-outline"/>
+                </HBox>
+            </VBox>
+
+            <!-- Progress & Actions -->
+            <VBox styleClass="card" spacing="10">
+                <ProgressBar fx:id="progressBar" maxWidth="Infinity" progress="0.0"/>
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <Label fx:id="lblStatus" text="Pronto." styleClass="text-secondary" HBox.hgrow="ALWAYS"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnCancel" text="Cancelar" onAction="#handleCancel" styleClass="button-danger" visible="false" managed="false"/>
+                    <Button fx:id="btnQueue" text="Adicionar à Fila" onAction="#handleAddToQueue" styleClass="button-outline"/>
+                    <Button fx:id="btnExecute" text="Concatenar Agora" onAction="#handleExecute" styleClass="button-primary"/>
+                </HBox>
+            </VBox>
+
+        </VBox>
+    </VBox>
+</ScrollPane>

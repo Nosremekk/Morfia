@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" styleClass="content-area"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.ffmpegstudio.ui.controller.SubtitlesController">
+
+    <VBox spacing="16">
+        <VBox styleClass="view-header" spacing="4">
+            <Label text="Gerenciamento de Legendas" styleClass="view-title"/>
+            <Label text="Extraia, incorpore, queime (burn-in), remova ou edite metadados e flags de faixas de legenda."
+                   styleClass="view-subtitle"/>
+        </VBox>
+
+        <VBox spacing="16" styleClass="view-body">
+
+            <!-- Source Video -->
+            <HBox styleClass="card" spacing="12" alignment="CENTER_LEFT">
+                <Button text="Selecionar Mídia..." onAction="#handleSelectMedia" styleClass="button-outline"/>
+                <Label fx:id="lblMediaName" text="Nenhum arquivo selecionado" styleClass="card-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblSubCount" text="0 legendas" styleClass="badge, badge-neutral"/>
+            </HBox>
+
+            <!-- Existing Subtitle Streams -->
+            <VBox styleClass="card" spacing="10">
+                <Label text="Faixas de Legenda Existentes (Clique para selecionar)" styleClass="card-title"/>
+                <ListView fx:id="lvSubtitles" prefHeight="130" styleClass="list-view"/>
+            </VBox>
+
+            <!-- Subtitle Action Parameters -->
+            <VBox styleClass="card" spacing="14">
+                <Label text="Configuração da Operação" styleClass="card-title"/>
+
+                <HBox spacing="16">
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Operação:" styleClass="text-secondary"/>
+                        <ComboBox fx:id="cmbAction" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="6" prefWidth="180">
+                        <Label text="Formato (Extração):" styleClass="text-secondary"/>
+                        <ComboBox fx:id="cmbFormat" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="6" prefWidth="150">
+                        <Label text="Contêiner Saída:" styleClass="text-secondary"/>
+                        <ComboBox fx:id="cmbContainer" maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Legenda Externa:" styleClass="text-secondary"/>
+                    <TextField fx:id="txtExternalSub" HBox.hgrow="ALWAYS" promptText="Caminho para .srt, .ass, .vtt..."/>
+                    <Button text="Procurar..." onAction="#handleSelectExternalSub" styleClass="button-outline"/>
+                </HBox>
+
+                <HBox spacing="16" alignment="CENTER_LEFT">
+                    <VBox spacing="6" prefWidth="120">
+                        <Label text="Idioma (ISO):" styleClass="text-secondary"/>
+                        <TextField fx:id="txtLanguage" promptText="por"/>
+                    </VBox>
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Título da Faixa:" styleClass="text-secondary"/>
+                        <TextField fx:id="txtTitle" promptText="Português (Brasil)"/>
+                    </VBox>
+                    <VBox spacing="6" prefWidth="130">
+                        <Label text="Deslocamento (s):" styleClass="text-secondary"/>
+                        <TextField fx:id="txtOffset" promptText="0.0"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="20">
+                    <CheckBox fx:id="chkDefault" text="Marcar como Padrão (Default)"/>
+                    <CheckBox fx:id="chkForced" text="Marcar como Forçada (Forced)"/>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Destino:" styleClass="text-secondary"/>
+                    <TextField fx:id="txtOutputPath" HBox.hgrow="ALWAYS"/>
+                    <Button text="Alterar..." onAction="#handleBrowseOutput" styleClass="button-outline"/>
+                </HBox>
+            </VBox>
+
+            <!-- Progress & Actions -->
+            <VBox styleClass="card" spacing="10">
+                <ProgressBar fx:id="progressBar" maxWidth="Infinity" progress="0.0"/>
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <Label fx:id="lblStatus" text="Pronto." styleClass="text-secondary"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnCancel" text="Cancelar" onAction="#handleCancel" styleClass="button-danger" visible="false" managed="false"/>
+                    <Button fx:id="btnQueue" text="Adicionar à Fila" onAction="#handleAddToQueue" styleClass="button-outline"/>
+                    <Button fx:id="btnExecute" text="Executar" onAction="#handleExecute" styleClass="button-primary"/>
+                </HBox>
+            </VBox>
+
+        </VBox>
+    </VBox>
+</ScrollPane>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<ScrollPane fitToWidth="true"
+            style="-fx-background-color: transparent; -fx-background: transparent;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.ffmpegstudio.ui.controller.SettingsController">
+
+    <VBox spacing="24">
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" styleClass="view-header">
+            <VBox spacing="4">
+                <Label text="Engine &amp; System Settings" styleClass="view-title"/>
+                <Label text="Configure local FFmpeg/FFprobe binaries, output directory and concurrency limits" styleClass="view-subtitle"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <ProgressIndicator fx:id="progressTesting" prefWidth="20" prefHeight="20"/>
+                <Button fx:id="btnAutoDetect" text="Auto-detect Paths" onAction="#onAutoDetect" styleClass="button-outline"/>
+                <Button fx:id="btnTest" text="Test Executables" onAction="#onTest" styleClass="button"/>
+            </HBox>
+        </HBox>
+
+        <!-- Body -->
+        <VBox spacing="20" styleClass="view-body">
+
+            <!-- Executables Configuration Card -->
+            <VBox styleClass="card" spacing="16">
+                <VBox spacing="2">
+                    <Label text="Executable Paths" styleClass="card-title"/>
+                    <Label text="Specify custom binaries or rely on system PATH" styleClass="card-subtitle"/>
+                </VBox>
+
+                <VBox spacing="14">
+                    <!-- FFmpeg -->
+                    <VBox spacing="6">
+                        <Label text="FFmpeg Binary Path" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <TextField fx:id="txtFfmpegPath" promptText="e.g. ffmpeg or /usr/bin/ffmpeg" HBox.hgrow="ALWAYS"/>
+                            <Button fx:id="btnBrowseFfmpeg" text="Browse..." onAction="#onBrowseFfmpeg" styleClass="button-outline"/>
+                        </HBox>
+                        <HBox spacing="6" alignment="CENTER_LEFT">
+                            <Circle fx:id="dotFfmpeg" radius="4" styleClass="status-dot, dot-warning"/>
+                            <Label fx:id="lblFfmpegStatus" text="Pending verification" styleClass="text-muted" style="-fx-font-size: 11px;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- FFprobe -->
+                    <VBox spacing="6">
+                        <Label text="FFprobe Binary Path" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <TextField fx:id="txtFfprobePath" promptText="e.g. ffprobe or /usr/bin/ffprobe" HBox.hgrow="ALWAYS"/>
+                            <Button fx:id="btnBrowseFfprobe" text="Browse..." onAction="#onBrowseFfprobe" styleClass="button-outline"/>
+                        </HBox>
+                        <HBox spacing="6" alignment="CENTER_LEFT">
+                            <Circle fx:id="dotFfprobe" radius="4" styleClass="status-dot, dot-warning"/>
+                            <Label fx:id="lblFfprobeStatus" text="Pending verification" styleClass="text-muted" style="-fx-font-size: 11px;"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </VBox>
+
+            <!-- Processing & Storage Card -->
+            <VBox styleClass="card" spacing="16">
+                <VBox spacing="2">
+                    <Label text="Preferências Gerais e Aparência" styleClass="card-title"/>
+                    <Label text="Idioma, tema visual, diretórios, retenção de logs e limites de concorrência" styleClass="card-subtitle"/>
+                </VBox>
+
+                <VBox spacing="14">
+                    <HBox spacing="16">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Idioma / Language" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                            <javafx.scene.control.ComboBox fx:id="cmbLanguage" maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Tema Visual / Theme" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                            <javafx.scene.control.ComboBox fx:id="cmbTheme" maxWidth="Infinity"/>
+                        </VBox>
+                    </HBox>
+
+                    <VBox spacing="6">
+                        <Label text="Default Output Directory" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <TextField fx:id="txtOutputDir" promptText="Default folder for processed media" HBox.hgrow="ALWAYS"/>
+                            <Button fx:id="btnBrowseOutput" text="Browse..." onAction="#onBrowseOutput" styleClass="button-outline"/>
+                        </HBox>
+                    </VBox>
+
+                    <VBox spacing="6">
+                        <Label text="Diretório Temporário" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="txtTempDir" promptText="/tmp"/>
+                    </VBox>
+
+                    <HBox spacing="20" alignment="CENTER_LEFT">
+                        <VBox spacing="6">
+                            <Label text="Concorrência Máxima" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                            <Spinner fx:id="spinnerConcurrency" prefWidth="110"/>
+                        </VBox>
+                        <VBox spacing="6">
+                            <Label text="Limite de Cache (MB)" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                            <Spinner fx:id="spinnerCacheLimit" prefWidth="110"/>
+                        </VBox>
+                        <VBox spacing="6">
+                            <Label text="Retenção de Logs (dias)" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                            <Spinner fx:id="spinnerLogRetention" prefWidth="110"/>
+                        </VBox>
+                        <javafx.scene.control.CheckBox fx:id="chkConfirmations" text="Exibir confirmações de segurança"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <!-- Capabilities Inspector Card -->
+            <VBox styleClass="card" spacing="14">
+                <VBox spacing="2">
+                    <Label text="Detected FFmpeg Capabilities" styleClass="card-title"/>
+                    <Label text="Hardware encoders, acceleration APIs and filters discovered in your installation" styleClass="card-subtitle"/>
+                </VBox>
+
+                <TabPane tabClosingPolicy="UNAVAILABLE" minHeight="240">
+                    <Tab text="Hardware Acceleration">
+                        <VBox spacing="8">
+                            <padding><Insets top="10"/></padding>
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Button fx:id="btnProbeHardware" text="Testar Encoders em Hardware Real" onAction="#onProbeHardware" styleClass="button-primary"/>
+                                <Label fx:id="lblDriStatus" text="Clique para validar dispositivos /dev/dri e encoders reais." styleClass="text-secondary"/>
+                            </HBox>
+                            <ListView fx:id="listHwAccels" prefHeight="200"/>
+                        </VBox>
+                    </Tab>
+                    <Tab text="Video Encoders">
+                        <VBox spacing="8">
+                            <padding><Insets top="10"/></padding>
+                            <ListView fx:id="listVideoEncoders" prefHeight="200"/>
+                        </VBox>
+                    </Tab>
+                    <Tab text="Audio Encoders">
+                        <VBox spacing="8">
+                            <padding><Insets top="10"/></padding>
+                            <ListView fx:id="listAudioEncoders" prefHeight="200"/>
+                        </VBox>
+                    </Tab>
+                    <Tab text="Video Filters">
+                        <VBox spacing="8">
+                            <padding><Insets top="10"/></padding>
+                            <ListView fx:id="listFilters" prefHeight="200"/>
+                        </VBox>
+                    </Tab>
+                </TabPane>
+            </VBox>
+
+            <!-- Save / Actions Bar -->
+            <HBox spacing="12" alignment="CENTER_RIGHT">
+                <Label fx:id="lblSaveStatus" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnReset" text="Restore Defaults" onAction="#onReset" styleClass="button-outline"/>
+                <Button fx:id="btnSave" text="Save Preferences" onAction="#onSave" styleClass="button-primary"/>
+            </HBox>
+
+        </VBox>
+    </VBox>
+</ScrollPane>

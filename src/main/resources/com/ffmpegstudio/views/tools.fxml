@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" styleClass="content-area"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.ffmpegstudio.ui.controller.ToolsController">
+
+    <VBox spacing="16">
+        <!-- Header -->
+        <VBox styleClass="view-header" spacing="4">
+            <Label text="Ferramentas Multimídia" styleClass="view-title"/>
+            <Label text="Suíte especializada para extração e normalização de áudio, cortes precisos de vídeo e exportação de GIFs e frames."
+                   styleClass="view-subtitle"/>
+        </VBox>
+
+        <VBox spacing="16" styleClass="view-body">
+
+            <!-- File Drop / Source Card -->
+            <HBox fx:id="sourceBox" styleClass="card" spacing="16" alignment="CENTER_LEFT">
+                <Button fx:id="btnSelectFile" text="Selecionar Mídia..." onAction="#handleSelectFile" styleClass="button-outline"/>
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblFileName" text="Nenhum arquivo selecionado" styleClass="card-title"/>
+                    <Label fx:id="lblMediaSummary" text="Arraste um vídeo ou áudio para esta área ou clique em Selecionar Mídia" styleClass="card-subtitle"/>
+                </VBox>
+                <Label fx:id="lblDurationBadge" text="-" styleClass="badge, badge-neutral"/>
+            </HBox>
+
+            <!-- Tools TabPane -->
+            <TabPane fx:id="toolsTabPane" tabClosingPolicy="UNAVAILABLE" styleClass="card" style="-fx-padding: 0;">
+                
+                <!-- TAB 1: ÁUDIO -->
+                <Tab text="Áudio &amp; Normalização">
+                    <VBox spacing="16" style="-fx-padding: 20;">
+                        <Label text="Extração e Tratamento de Áudio" styleClass="card-title"/>
+                        <Label text="Converta a trilha sonora, amplifique o ganho ou normalize conforme o padrão internacional EBU R128." styleClass="text-secondary"/>
+
+                        <HBox spacing="16">
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Formato de Saída:" styleClass="text-secondary"/>
+                                <ComboBox fx:id="cmbAudioFormat" maxWidth="Infinity"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Taxa de Bits (Bitrate):" styleClass="text-secondary"/>
+                                <ComboBox fx:id="cmbAudioBitrate" maxWidth="Infinity"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Canais:" styleClass="text-secondary"/>
+                                <ComboBox fx:id="cmbAudioChannels" maxWidth="Infinity"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Frequência (Sample Rate):" styleClass="text-secondary"/>
+                                <ComboBox fx:id="cmbAudioSampleRate" maxWidth="Infinity"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox spacing="16" alignment="CENTER_LEFT">
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Faixa de Áudio de Origem:" styleClass="text-secondary"/>
+                                <ComboBox fx:id="cmbAudioTracks" maxWidth="Infinity"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <HBox alignment="CENTER_LEFT" spacing="8">
+                                    <Label text="Ajuste de Volume:" styleClass="text-secondary"/>
+                                    <Label fx:id="lblVolumeValue" text="100%" styleClass="badge, badge-info"/>
+                                </HBox>
+                                <Slider fx:id="sliderVolume" min="0.25" max="2.0" value="1.0" blockIncrement="0.05"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="12" styleClass="callout, callout-info">
+                            <CheckBox fx:id="chkLoudnorm" text="Ativar Normalização EBU R128 (Loudnorm)" style="-fx-font-weight: bold; -fx-text-fill: #a5b4fc;"/>
+                            <Label text="Uniformiza o volume perceptual evitando variações bruscas entre diálogos e explosões." styleClass="text-secondary"/>
+                        </HBox>
+
+                        <HBox spacing="12" alignment="CENTER_RIGHT">
+                            <Button text="Adicionar à Fila" onAction="#handleAudioAddToQueue" styleClass="button-outline"/>
+                            <Button text="Extrair / Converter Áudio" onAction="#handleAudioExecute" styleClass="button-primary"/>
+                        </HBox>
+                    </VBox>
+                </Tab>
+
+                <!-- TAB 2: CORTE (TRIM) -->
+                <Tab text="Corte de Vídeo (Trim)">
+                    <VBox spacing="16" style="-fx-padding: 20;">
+                        <Label text="Recorte de Trecho de Vídeo" styleClass="card-title"/>
+                        <Label text="Defina com precisão o intervalo de tempo que deseja manter." styleClass="text-secondary"/>
+
+                        <HBox spacing="20" alignment="CENTER_LEFT">
+                            <VBox spacing="6">
+                                <Label text="Ponto Inicial (Início):" styleClass="text-secondary"/>
+                                <TextField fx:id="txtTrimStart" promptText="00:00:00.000" prefWidth="160"/>
+                            </VBox>
+                            <Label text="➔" styleClass="text-muted" style="-fx-font-size: 16px;"/>
+                            <VBox spacing="6">
+                                <Label text="Ponto Final (Fim):" styleClass="text-secondary"/>
+                                <TextField fx:id="txtTrimEnd" promptText="00:00:10.000" prefWidth="160"/>
+                            </VBox>
+                            <VBox spacing="6">
+                                <Label text="Duração do Recorte:" styleClass="text-secondary"/>
+                                <Label fx:id="lblTrimDuration" text="00:00:10" styleClass="badge, badge-info" style="-fx-font-size: 13px; -fx-padding: 6 12;"/>
+                            </VBox>
+                        </HBox>
+
+                        <VBox spacing="10">
+                            <Label text="Modo de Corte:" styleClass="text-secondary"/>
+                            <HBox spacing="20">
+                                <RadioButton fx:id="rbTrimFast" text="Corte Rápido (Stream Copy)" selected="true">
+                                    <toggleGroup>
+                                        <ToggleGroup fx:id="trimModeGroup"/>
+                                    </toggleGroup>
+                                </RadioButton>
+                                <RadioButton fx:id="rbTrimAccurate" text="Corte Preciso (Recodificação)" toggleGroup="$trimModeGroup"/>
+                            </HBox>
+                        </VBox>
+
+                        <VBox fx:id="trimExplanationBox" styleClass="callout, callout-info" spacing="4">
+                            <Label fx:id="lblTrimExplainTitle" text="Corte Rápido sem Perda:" style="-fx-font-weight: bold; -fx-text-fill: #a5b4fc;"/>
+                            <Label fx:id="lblTrimExplainDesc" text="Executado instantaneamente sem recodificação (-c copy). O corte é alinhado ao keyframe (I-frame) mais próximo."
+                                   styleClass="text-secondary" wrapText="true"/>
+                        </VBox>
+
+                        <HBox spacing="12" alignment="CENTER_RIGHT">
+                            <Button text="Adicionar à Fila" onAction="#handleTrimAddToQueue" styleClass="button-outline"/>
+                            <Button text="Cortar Vídeo" onAction="#handleTrimExecute" styleClass="button-primary"/>
+                        </HBox>
+                    </VBox>
+                </Tab>
+
+                <!-- TAB 3: GIFS E FRAMES -->
+                <Tab text="Imagens &amp; GIFs">
+                    <VBox spacing="20" style="-fx-padding: 20;">
+
+                        <!-- GIF Section -->
+                        <VBox spacing="12">
+                            <Label text="Gerador de GIF Animado" styleClass="card-title"/>
+                            <Label text="Crie GIFs otimizados com filtro de geração de paleta de duas passagens (palettegen/paletteuse)." styleClass="text-secondary"/>
+
+                            <HBox spacing="16">
+                                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                    <Label text="Timestamp Inicial:" styleClass="text-secondary"/>
+                                    <TextField fx:id="txtGifStart" promptText="00:00:00"/>
+                                </VBox>
+                                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                    <Label text="Duração (segundos):" styleClass="text-secondary"/>
+                                    <ComboBox fx:id="cmbGifDuration" maxWidth="Infinity"/>
+                                </VBox>
+                                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                    <Label text="Taxa de Quadros (FPS):" styleClass="text-secondary"/>
+                                    <ComboBox fx:id="cmbGifFps" maxWidth="Infinity"/>
+                                </VBox>
+                                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                    <Label text="Largura (Resolução):" styleClass="text-secondary"/>
+                                    <ComboBox fx:id="cmbGifWidth" maxWidth="Infinity"/>
+                                </VBox>
+                            </HBox>
+
+                            <CheckBox fx:id="chkGifPalette" text="Otimizar cores com paleta personalizada (palettegen - recomendável para alta fidelidade)" selected="true"/>
+
+                            <HBox spacing="12" alignment="CENTER_RIGHT">
+                                <Button text="Adicionar GIF à Fila" onAction="#handleGifAddToQueue" styleClass="button-outline"/>
+                                <Button text="Gerar GIF Animado" onAction="#handleGifExecute" styleClass="button-primary"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Frame Still Section -->
+                        <VBox spacing="12" style="-fx-border-color: #232838 transparent transparent transparent; -fx-border-width: 1 0 0 0; -fx-padding: 16 0 0 0;">
+                            <Label text="Captura de Frame Estático (Thumbnail)" styleClass="card-title"/>
+                            <Label text="Extraia um quadro em alta definição no instante exato especificado." styleClass="text-secondary"/>
+
+                            <HBox spacing="16" alignment="CENTER_LEFT">
+                                <VBox spacing="6" prefWidth="200">
+                                    <Label text="Instante do Frame:" styleClass="text-secondary"/>
+                                    <TextField fx:id="txtFrameTime" promptText="00:00:01.000"/>
+                                </VBox>
+                                <VBox spacing="6" prefWidth="160">
+                                    <Label text="Formato de Imagem:" styleClass="text-secondary"/>
+                                    <ComboBox fx:id="cmbFrameFormat" maxWidth="Infinity"/>
+                                </VBox>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <VBox spacing="6" alignment="BOTTOM_RIGHT">
+                                    <HBox spacing="12">
+                                        <Button text="Adicionar à Fila" onAction="#handleFrameAddToQueue" styleClass="button-outline"/>
+                                        <Button text="Capturar Frame" onAction="#handleFrameExecute" styleClass="button-primary"/>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                    </VBox>
+                </Tab>
+
+            </TabPane>
+
+            <!-- Command Preview Card -->
+            <VBox styleClass="card" spacing="8">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Comando FFmpeg Estruturado" styleClass="card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="Geração segura via ProcessBuilder" styleClass="text-muted"/>
+                </HBox>
+                <TextField fx:id="txtCommandPreview" editable="false" style="-fx-font-family: monospace; -fx-font-size: 11px;"/>
+            </VBox>
+
+            <!-- Execution Status & Progress Card -->
+            <VBox fx:id="progressCard" styleClass="card" spacing="12" visible="false" managed="false">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Progresso da Operação" styleClass="card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnCancel" text="Cancelar" onAction="#handleCancel" styleClass="button-danger"/>
+                </HBox>
+                <ProgressBar fx:id="progressBar" maxWidth="Infinity" progress="0.0"/>
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label fx:id="lblStatus" text="Pronto." styleClass="text-secondary"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnOpenOutput" text="Abrir Arquivo Criado..." onAction="#handleOpenOutput" styleClass="button-outline" visible="false" managed="false"/>
+                </HBox>
+            </VBox>
+
+        </VBox>
+    </VBox>
+</ScrollPane>

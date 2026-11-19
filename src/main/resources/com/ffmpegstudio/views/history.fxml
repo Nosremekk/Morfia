@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" styleClass="content-area"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.ffmpegstudio.ui.controller.HistoryController">
+
+    <VBox spacing="16">
+        <VBox styleClass="view-header" spacing="4">
+            <Label text="Histórico e Diagnóstico Local" styleClass="view-title"/>
+            <Label text="Consulte operações anteriores, duplique configurações ou exporte diagnósticos técnicos do ambiente."
+                   styleClass="view-subtitle"/>
+        </VBox>
+
+        <VBox spacing="16" styleClass="view-body">
+            <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="card" style="-fx-padding: 0;">
+
+                <!-- TAB 1: HISTÓRICO -->
+                <Tab text="Histórico de Operações">
+                    <VBox spacing="12" style="-fx-padding: 18;">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <TextField fx:id="txtSearch" promptText="Pesquisar por arquivo ou operação..." HBox.hgrow="ALWAYS"/>
+                            <ComboBox fx:id="cmbStatusFilter" prefWidth="150"/>
+                            <Button text="Atualizar" onAction="#handleRefresh" styleClass="button-outline"/>
+                            <Button text="Limpar Histórico" onAction="#handleClearHistory" styleClass="button-danger"/>
+                        </HBox>
+
+                        <ListView fx:id="lvHistory" prefHeight="360" styleClass="list-view"/>
+                    </VBox>
+                </Tab>
+
+                <!-- TAB 2: DIAGNÓSTICO LOCAL -->
+                <Tab text="Central de Diagnóstico">
+                    <VBox spacing="12" style="-fx-padding: 18;">
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Button text="Gerar Relatório Local" onAction="#handleGenerateDiagnostics" styleClass="button-primary"/>
+                            <CheckBox fx:id="chkIncludePaths" text="Incluir caminhos locais de executáveis/diretórios"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button text="Copiar" onAction="#handleCopyDiagnostics" styleClass="button-outline"/>
+                            <Button text="Exportar .txt..." onAction="#handleExportDiagnostics" styleClass="button-outline"/>
+                        </HBox>
+                        <TextArea fx:id="txtDiagnostics" editable="false" prefHeight="340" styleClass="mono-field"/>
+                    </VBox>
+                </Tab>
+
+            </TabPane>
+        </VBox>
+    </VBox>
+</ScrollPane>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.ffmpegstudio.ui.controller.SetupWizardController"
+            fitToWidth="true"
+            styleClass="scroll-pane">
+    <VBox spacing="16">
+        <padding>
+            <Insets top="24" right="28" bottom="28" left="28"/>
+        </padding>
+
+        <HBox alignment="CENTER_LEFT" spacing="12">
+            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                <Label fx:id="lblTitle" text="Assistente de Configuração do FFmpeg" styleClass="page-title"/>
+                <Label fx:id="lblStepIndicator" text="Etapa 1 de 9 — Boas-vindas" styleClass="text-secondary"/>
+            </VBox>
+            <Button fx:id="btnSkipForNow" text="Configurar Depois" styleClass="button-outline" onAction="#handleSkipForNow"/>
+        </HBox>
+
+        <ProgressBar fx:id="stepProgress" progress="0.11" maxWidth="Infinity" prefHeight="8"/>
+
+        <!-- Step Card -->
+        <VBox spacing="14" styleClass="card">
+            <Label fx:id="lblStepHeading" text="1. Boas-vindas" styleClass="section-title"/>
+            <Label fx:id="lblStepDescription" wrapText="true" styleClass="text-secondary"
+                   text="Este aplicativo opera 100% offline e utiliza FFmpeg e FFprobe externos instalados no seu sistema. Nenhum executável é baixado automaticamente."/>
+
+            <!-- Interactive Step Content Container -->
+            <VBox fx:id="stepContentBox" spacing="10"/>
+
+            <Separator/>
+
+            <!-- Manual Executable Selection (visible in step 6 or always available as quick override) -->
+            <VBox fx:id="manualPathsBox" spacing="8">
+                <Label text="Caminhos dos Executáveis" styleClass="field-label"/>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="FFmpeg:" prefWidth="70"/>
+                    <TextField fx:id="txtFfmpegPath" HBox.hgrow="ALWAYS" promptText="ffmpeg ou caminho completo"/>
+                    <Button text="Selecionar..." styleClass="button-outline" onAction="#handleBrowseFfmpeg"/>
+                </HBox>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="FFprobe:" prefWidth="70"/>
+                    <TextField fx:id="txtFfprobePath" HBox.hgrow="ALWAYS" promptText="ffprobe ou caminho completo"/>
+                    <Button text="Selecionar..." styleClass="button-outline" onAction="#handleBrowseFfprobe"/>
+                </HBox>
+            </VBox>
+
+            <TextArea fx:id="txtDetailsOutput" editable="false" wrapText="true" prefRowCount="7" styleClass="mono-field"/>
+
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button fx:id="btnActionPrimary" text="Buscar Automaticamente" styleClass="button-outline" onAction="#handleStepAction"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnPrev" text="Anterior" styleClass="button-outline" onAction="#handlePrevStep"/>
+                <Button fx:id="btnNext" text="Próximo" styleClass="button-primary" onAction="#handleNextStep"/>
+            </HBox>
+        </VBox>
+
+        <!-- About & License Card (KD-001 / KD-002) -->
+        <VBox spacing="8" styleClass="card">
+            <Label text="Sobre o Aplicativo &amp; Licenciamento" styleClass="section-title"/>
+            <Label fx:id="lblAboutIdentity" wrapText="true"/>
+            <Label fx:id="lblAboutLicense" wrapText="true" styleClass="text-secondary"/>
+            <Label wrapText="true" styleClass="text-secondary"
+                   text="Aviso Legal: Este aplicativo é independente e não é afiliado ao projeto FFmpeg. FFmpeg e FFprobe são executáveis externos configurados pelo usuário sob suas respectivas licenças (LGPL/GPL). Consulte LICENSE e THIRD_PARTY_NOTICES.md."/>
+        </VBox>
+    </VBox>
+</ScrollPane>

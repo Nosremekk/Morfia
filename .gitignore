@@ -1,0 +1,59 @@
+# Maven build & distribution outputs
+target/
+dist/
+*.class
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# Log files
+*.log
+logs/
+
+# Temporary files & FFmpeg Studio runtime artifacts
+*.tmp
+*.~tmp_*
+.~tmp_*
+.ffmpegstudio-cache/
+hs_err_pid*
+replay_pid*
+
+# Personal configs & local test outputs
+*.json.bak
+settings.json
+presets.json
+queue.json
+history.json
+
+# Manual test media files in workspace
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.webm
+*.mp3
+*.flac
+*.wav
+*.aac
+*.gif
+*.png
+!packaging/icons/*.png
+!src/main/resources/com/ffmpegstudio/icons/*.png
+*.jpg
+*.jpeg
+*.webp
+*.srt
+*.ass
+*.vtt
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+
+# OS files
+.DS_Store
+Thumbs.db

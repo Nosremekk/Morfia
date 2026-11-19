@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" styleClass="content-area"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.ffmpegstudio.ui.controller.WorkspaceController">
+
+    <VBox spacing="16">
+        <VBox styleClass="view-header" spacing="4">
+            <Label text="Área de Trabalho Compartilhada (Biblioteca)" styleClass="view-title"/>
+            <Label text="Importe mídias uma única vez e encaminhe para qualquer ferramenta sem duplicar arquivos no disco."
+                   styleClass="view-subtitle"/>
+        </VBox>
+
+        <VBox spacing="14" styleClass="view-body">
+
+            <!-- Import & Search Toolbar -->
+            <VBox fx:id="dropContainer" styleClass="card" spacing="12">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Button text="Importar Arquivos (Ctrl+O)" onAction="#handleImportFiles" styleClass="button-primary"/>
+                    <Button text="Importar Pasta (Ctrl+Shift+O)" onAction="#handleImportFolder" styleClass="button-outline"/>
+                    <Button text="Verificar Alterações no Disco" onAction="#handleRefreshFiles" styleClass="button-outline"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="lblCount" text="0 itens" styleClass="badge, badge-info"/>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <TextField fx:id="txtSearch" promptText="Pesquisar por nome (Ctrl+F)..." HBox.hgrow="ALWAYS"/>
+                    <ComboBox fx:id="cmbKindFilter" prefWidth="140"/>
+                    <ComboBox fx:id="cmbSortOrder" prefWidth="170"/>
+                </HBox>
+            </VBox>
+
+            <!-- Shared Media List -->
+            <VBox styleClass="card" spacing="10">
+                <Label text="Mídias na Sessão (Arraste arquivos para cá ou clique nas ações rápidas)" styleClass="card-title"/>
+                <ListView fx:id="lvLibrary" prefHeight="400" styleClass="list-view"/>
+            </VBox>
+
+        </VBox>
+    </VBox>
+</ScrollPane>

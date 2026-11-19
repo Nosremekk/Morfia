@@ -1,0 +1,40 @@
+name: Dependency Audit & SBOM
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  sbom-and-audit:
+    name: Generate CycloneDX SBOM & Dependency Tree
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Export Dependency Tree
+        run: mvn -B dependency:tree -DoutputFile=target/dependency-tree.txt
+
+      - name: Generate CycloneDX SBOM
+        run: mvn -B org.cyclonedx:cyclonedx-maven-plugin:2.9.0:makeAggregateBom
+
+      - name: Upload SBOM & Dependency Audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-and-dependencies
+          path: |
+            target/bom.json
+            target/bom.xml
+            target/dependency-tree.txt
+          if-no-files-found: warn

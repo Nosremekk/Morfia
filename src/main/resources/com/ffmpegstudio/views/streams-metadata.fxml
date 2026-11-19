@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" styleClass="content-area"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.ffmpegstudio.ui.controller.StreamsMetadataController">
+
+    <VBox spacing="16">
+        <VBox styleClass="view-header" spacing="4">
+            <Label text="Streams &amp; Metadados" styleClass="view-title"/>
+            <Label text="Inspeção avançada de faixas, remuxing sem recodificação e edição de tags do contêiner."
+                   styleClass="view-subtitle"/>
+        </VBox>
+
+        <VBox spacing="16" styleClass="view-body">
+
+            <!-- Source Media -->
+            <HBox styleClass="card" spacing="12" alignment="CENTER_LEFT">
+                <Button text="Selecionar Mídia..." onAction="#handleSelectMedia" styleClass="button-outline"/>
+                <Label fx:id="lblMediaName" text="Nenhum arquivo selecionado" styleClass="card-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Contêiner Saída:" styleClass="text-secondary"/>
+                <ComboBox fx:id="cmbContainer" prefWidth="130"/>
+            </HBox>
+
+            <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="card" style="-fx-padding: 0;">
+
+                <!-- TAB 1: STREAMS & REMUXING -->
+                <Tab text="Streams &amp; Remuxing">
+                    <VBox spacing="14" style="-fx-padding: 20;">
+                        <Label text="Streams Detectadas (Índices Globais FFprobe)" styleClass="card-title"/>
+                        <Label text="Marque as faixas desejadas, reordene ou edite título/idioma/padrão. O remuxing preserva a qualidade original sem recodificar."
+                               styleClass="text-secondary"/>
+                        <ListView fx:id="lvStreams" prefHeight="250" styleClass="list-view"/>
+
+                        <Label text="Capítulos Detectados" styleClass="card-title"/>
+                        <ListView fx:id="lvChapters" prefHeight="90" styleClass="list-view"/>
+
+                        <HBox spacing="12" alignment="CENTER_RIGHT">
+                            <Button text="Adicionar Remux à Fila" onAction="#handleQueueRemux" styleClass="button-outline"/>
+                            <Button text="Remuxar (Stream Copy)" onAction="#handleExecuteRemux" styleClass="button-primary"/>
+                        </HBox>
+                    </VBox>
+                </Tab>
+
+                <!-- TAB 2: METADADOS -->
+                <Tab text="Metadados Globais">
+                    <VBox spacing="14" style="-fx-padding: 20;">
+                        <Label text="Tags do Contêiner (Padrão FFmpeg)" styleClass="card-title"/>
+
+                        <GridPane hgap="16" vgap="10">
+                            <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Título:" styleClass="text-secondary"/>
+                                <TextField fx:id="txtTitle" prefWidth="280"/>
+                            </VBox>
+                            <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Artista / Autor:" styleClass="text-secondary"/>
+                                <TextField fx:id="txtArtist" prefWidth="280"/>
+                            </VBox>
+                            <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                <Label text="Álbum:" styleClass="text-secondary"/>
+                                <TextField fx:id="txtAlbum" prefWidth="240"/>
+                            </VBox>
+
+                            <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="Ano / Data:" styleClass="text-secondary"/>
+                                <TextField fx:id="txtDate"/>
+                            </VBox>
+                            <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label text="Gênero:" styleClass="text-secondary"/>
+                                <TextField fx:id="txtGenre"/>
+                            </VBox>
+                            <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                <Label text="Idioma:" styleClass="text-secondary"/>
+                                <TextField fx:id="txtLanguage"/>
+                            </VBox>
+
+                            <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                <Label text="Copyright:" styleClass="text-secondary"/>
+                                <TextField fx:id="txtCopyright"/>
+                            </VBox>
+                            <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <Label text="Comentário:" styleClass="text-secondary"/>
+                                <TextField fx:id="txtComment"/>
+                            </VBox>
+                            <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                <Label text="Descrição:" styleClass="text-secondary"/>
+                                <TextField fx:id="txtDescription"/>
+                            </VBox>
+                        </GridPane>
+
+                        <HBox spacing="20">
+                            <CheckBox fx:id="chkClearAll" text="Limpar todas as tags globais de metadados (-map_metadata -1)"/>
+                            <CheckBox fx:id="chkPreserveChapters" text="Preservar capítulos" selected="true"/>
+                        </HBox>
+
+                        <VBox styleClass="callout, callout-info" spacing="4">
+                            <Label text="Nota sobre remoção de metadados:" style="-fx-font-weight: bold; -fx-text-fill: #a5b4fc;"/>
+                            <Label text="A limpeza de tags remove metadados de contêiner/streams suportados pelo FFmpeg, mas não garante anonimização forense completa de todos os átomos binários ou fluxos internos."
+                                   styleClass="text-secondary" wrapText="true"/>
+                        </VBox>
+
+                        <HBox spacing="12" alignment="CENTER_RIGHT">
+                            <Button text="Adicionar à Fila" onAction="#handleQueueMeta" styleClass="button-outline"/>
+                            <Button text="Salvar Metadados (Stream Copy)" onAction="#handleExecuteMeta" styleClass="button-primary"/>
+                        </HBox>
+                    </VBox>
+                </Tab>
+
+            </TabPane>
+
+            <!-- Destination & Progress -->
+            <VBox styleClass="card" spacing="10">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Destino:" styleClass="text-secondary"/>
+                    <TextField fx:id="txtOutputPath" HBox.hgrow="ALWAYS"/>
+                    <Button text="Alterar..." onAction="#handleBrowseOutput" styleClass="button-outline"/>
+                </HBox>
+                <ProgressBar fx:id="progressBar" maxWidth="Infinity" progress="0.0"/>
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <Label fx:id="lblStatus" text="Pronto." styleClass="text-secondary"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnCancel" text="Cancelar" onAction="#handleCancel" styleClass="button-danger" visible="false" managed="false"/>
+                </HBox>
+            </VBox>
+
+        </VBox>
+    </VBox>
+</ScrollPane>

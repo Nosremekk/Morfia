@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true"
+            style="-fx-background-color: transparent; -fx-background: transparent;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.ffmpegstudio.ui.controller.ConverterController">
+
+    <VBox spacing="20">
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" styleClass="view-header">
+            <VBox spacing="4">
+                <Label text="Media Converter &amp; Transcoder" styleClass="view-title"/>
+                <Label text="Convert, transcode, compress and resize video/audio files with real-time progress" styleClass="view-subtitle"/>
+            </VBox>
+        </HBox>
+
+        <!-- Body -->
+        <VBox spacing="20" styleClass="view-body">
+
+            <!-- 1. Source Media Card -->
+            <VBox styleClass="card" spacing="14">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox spacing="2">
+                        <Label text="Source Media" styleClass="card-title"/>
+                        <Label text="Inspect media properties and select track to convert" styleClass="card-subtitle"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <ProgressIndicator fx:id="inspectProgress" prefWidth="20" prefHeight="20"/>
+                    <Button fx:id="btnSelectInput" text="Browse Media..." onAction="#onSelectInput" styleClass="button-outline"/>
+                </HBox>
+
+                <!-- Drop & Info Zone -->
+                <VBox fx:id="mediaDropZone" styleClass="dropzone" spacing="8" style="-fx-padding: 16 20;">
+                    <HBox alignment="CENTER_LEFT" spacing="16">
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label fx:id="lblMediaTitle" text="No media file selected" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #f8fafc;"/>
+                            <Label fx:id="lblMediaDetails" text="Drag and drop any video or audio file here to inspect." styleClass="text-secondary"/>
+                            <HBox spacing="16">
+                                <Label fx:id="lblVideoDetails" text="Video: None" styleClass="badge" style="-fx-background-color: #1e2436;"/>
+                                <Label fx:id="lblAudioDetails" text="Audio: None" styleClass="badge" style="-fx-background-color: #1e2436;"/>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <!-- 2. Transcoding Settings Card -->
+            <VBox styleClass="card" spacing="16">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <VBox spacing="2" HBox.hgrow="ALWAYS">
+                        <Label text="Encoding &amp; Output Configuration" styleClass="card-title"/>
+                        <Label text="Select target format, codecs, quality factor and dimensions" styleClass="card-subtitle"/>
+                    </VBox>
+                    <HBox alignment="CENTER_RIGHT" spacing="8">
+                        <Label text="Preset:" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="comboPresets" promptText="Carregar Preset..." prefWidth="240"/>
+                    </HBox>
+                </HBox>
+
+                <!-- Settings Grid -->
+                <GridPane hgap="16" vgap="14">
+                    <!-- Row 0: Container & Resolution -->
+                    <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="Target Container" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="comboContainer" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="Target Resolution" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="comboResolution" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- Row 1: Video Codec & Quality CRF -->
+                    <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <Label text="Video Codec" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="comboVideoCodec" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="Quality / CRF (Constant Rate Factor)" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="lblCrfValue" text="23" styleClass="badge"/>
+                        </HBox>
+                        <Slider fx:id="sliderCrf" min="0" max="51" value="23" majorTickUnit="10" showTickMarks="false"/>
+                    </VBox>
+
+                    <!-- Row 2: Audio Codec & Speed Preset -->
+                    <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                        <Label text="Audio Codec" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="comboAudioCodec" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Label text="Encoder Speed Preset" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="comboPreset" maxWidth="Infinity"/>
+                    </VBox>
+                </GridPane>
+
+                <!-- Output Destination -->
+                <VBox spacing="6">
+                    <Label text="Destination File Path" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField fx:id="txtOutputPath" promptText="Output destination path" HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="btnBrowseOutput" text="Browse..." onAction="#onBrowseOutput" styleClass="button-outline"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Equivalent Command Preview -->
+                <VBox spacing="6">
+                    <Label text="Generated FFmpeg Command Preview" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                    <TextArea fx:id="txtPreviewCommand"
+                              editable="false"
+                              wrapText="true"
+                              prefRowCount="2"
+                              style="-fx-font-family: monospace; -fx-font-size: 11px;"/>
+                </VBox>
+            </VBox>
+
+            <!-- 3. Progress & Live Execution Card -->
+            <VBox fx:id="progressSection" styleClass="card" spacing="16">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox spacing="2">
+                        <Label text="Processing Status" styleClass="card-title"/>
+                        <Label fx:id="lblStatus" text="Ready to transcode" styleClass="card-subtitle"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Button fx:id="btnAddToQueue" text="Adicionar à Fila" onAction="#onAddToQueue" styleClass="button-outline" disable="true"/>
+                        <Button fx:id="btnCancel" text="Cancel" onAction="#onCancelConversion" styleClass="button-outline" disable="true"/>
+                        <Button fx:id="btnConvert" text="Convert Now" onAction="#onStartConversion" styleClass="button-primary" disable="true"/>
+                    </HBox>
+                </HBox>
+
+                <VBox spacing="8">
+                    <ProgressBar fx:id="progressBar" progress="0.0" maxWidth="Infinity" prefHeight="10"/>
+                    <HBox spacing="16" alignment="CENTER_LEFT">
+                        <Label text="PROGRESS:" styleClass="text-muted" style="-fx-font-size: 11px; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblProgressPercent" text="0.0%" styleClass="badge"/>
+
+                        <Label text="FPS:" styleClass="text-muted" style="-fx-font-size: 11px; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblFps" text="-" styleClass="text-primary"/>
+
+                        <Label text="SPEED:" styleClass="text-muted" style="-fx-font-size: 11px; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblSpeed" text="-" styleClass="text-primary"/>
+
+                        <Label text="ETA:" styleClass="text-muted" style="-fx-font-size: 11px; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblEta" text="-" styleClass="text-primary"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Technical Logs -->
+                <VBox fx:id="logsContainer" spacing="6">
+                    <Label text="FFmpeg Console Output" styleClass="text-secondary" style="-fx-font-weight: bold;"/>
+                    <ListView fx:id="listLogs" prefHeight="120" style="-fx-font-family: monospace; -fx-font-size: 11px;"/>
+                </VBox>
+            </VBox>
+
+        </VBox>
+    </VBox>
+</ScrollPane>
