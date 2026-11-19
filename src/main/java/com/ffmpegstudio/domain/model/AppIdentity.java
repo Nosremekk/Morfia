@@ -23,6 +23,29 @@ public final class AppIdentity {
      * that reject SemVer pre-release suffixes.
      */
     public static final String NATIVE_VERSION = "1.0.0";
+    public static final String LINUX_PKG_RELEASE = "0.1.rc1";
+    public static final String WINDOWS_MSI_VERSION = "0.99.1";
+    public static final String MACOS_PKG_VERSION = "0.99.1";
+
+    public static String toWindowsMsiVersion(String semVer) {
+        if (semVer == null || semVer.isBlank()) return "0.0.0";
+        int dash = semVer.indexOf('-');
+        if (dash < 0) return semVer;
+        String base = semVer.substring(0, dash);
+        String pre = semVer.substring(dash + 1);
+        if ("1.0.0".equals(base) && pre.startsWith("rc.")) {
+            String num = pre.substring(3).replaceAll("[^0-9]", "");
+            return "0.99." + (num.isEmpty() ? "1" : num);
+        }
+        return base;
+    }
+
+    public static String toRpmRelease(String semVer) {
+        if (semVer == null || !semVer.contains("-")) return "1";
+        String pre = semVer.substring(semVer.indexOf('-') + 1).replace("-", ".");
+        String num = pre.replaceAll("[^0-9]", "");
+        return "0." + (num.isEmpty() ? "1" : num) + "." + pre;
+    }
 
     public static final String DESCRIPTION_PT =
             "Uma estação de trabalho multimídia de código aberto para conversão, edição, inspeção e processamento de arquivos locais, utilizando FFmpeg.";

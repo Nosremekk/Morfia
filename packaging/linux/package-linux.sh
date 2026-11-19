@@ -66,6 +66,7 @@ if command -v rpmbuild >/dev/null 2>&1; then
     --type rpm \
     --name "${PRODUCT_NAME}" \
     --app-version "${JPACKAGE_VERSION}" \
+    --linux-app-release "0.1.rc1" \
     --vendor "${VENDOR}" \
     --input "${STAGE_DIR}" \
     --main-jar "${MAIN_JAR}" \
@@ -87,6 +88,7 @@ if command -v dpkg-deb >/dev/null 2>&1 && command -v fakeroot >/dev/null 2>&1; t
     --type deb \
     --name "${PRODUCT_NAME}" \
     --app-version "${JPACKAGE_VERSION}" \
+    --linux-app-release "0.1.rc1" \
     --vendor "${VENDOR}" \
     --input "${STAGE_DIR}" \
     --main-jar "${MAIN_JAR}" \

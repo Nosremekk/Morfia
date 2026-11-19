@@ -19,34 +19,34 @@ jobs:
           - label: windows-x64
             os: windows-2022
           - label: macos-arm64
-            os: macos-14
+            os: macos-15
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up JDK 25
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '25'
           cache: maven
 
-      - name: Build JAR and Dependencies
-        run: mvn -B clean package -DskipTests dependency:copy-dependencies -DoutputDirectory=target/deps
+      - name: Build JAR and Runtime Dependencies
+        run: mvn -B clean package -DskipTests dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=target/deps
 
-      - name: Package Linux (tar.gz / deb / rpm)
+      - name: Package Linux (tar.gz / deb)
         if: runner.os == 'Linux'
         run: |
           chmod +x packaging/linux/package-linux.sh scripts/generate-checksums.sh
           ./packaging/linux/package-linux.sh
 
-      - name: Package Windows (zip / exe)
+      - name: Package Windows (zip / exe / msi)
         if: runner.os == 'Windows'
         shell: pwsh
         run: ./packaging/windows/package-windows.ps1
 
-      - name: Package macOS (dmg / app)
+      - name: Package macOS (app / dmg / pkg)
         if: runner.os == 'macOS'
         run: |
           chmod +x packaging/macos/package-macos.sh scripts/generate-checksums.sh

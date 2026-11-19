@@ -20,42 +20,36 @@ jobs:
         include:
           - label: Linux x86_64
             os: ubuntu-24.04
-            headless: true
           - label: Windows x86_64
             os: windows-2022
-            headless: false
           - label: macOS arm64
-            os: macos-14
-            headless: false
-          - label: macOS x86_64
-            os: macos-13
-            headless: false
+            os: macos-15
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up JDK 25
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '25'
           cache: maven
 
-      - name: Install FFmpeg on Linux (if needed for integration tests)
+      - name: Install FFmpeg on Linux (for integration tests)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg xvfb
 
-      - name: Install FFmpeg on macOS
+      - name: Install FFmpeg on macOS (for integration tests)
         if: runner.os == 'macOS'
         run: brew install ffmpeg
 
-      - name: Install FFmpeg on Windows
+      - name: Install FFmpeg on Windows (for integration tests)
         if: runner.os == 'Windows'
         shell: pwsh
-        run: winget install --id Gyan.FFmpeg -e --accept-package-agreements --accept-source-agreements
+        run: choco install ffmpeg -y --no-progress
 
       - name: Run Maven Verify (Linux with Xvfb)
         if: runner.os == 'Linux'

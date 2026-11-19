@@ -42,6 +42,15 @@ class PlatformAndIdentityTest {
         assertNotNull(getClass().getResource("/com/ffmpegstudio/i18n/messages_en.properties"));
         assertNotNull(getClass().getResource("/com/ffmpegstudio/icons/morfia-128.png"));
         assertNotNull(getClass().getResource("/com/ffmpegstudio/icons/morfia-logo.svg"));
+
+        // Native version progression (RC1 < RC2 < 1.0.0 < 1.0.1)
+        assertEquals("0.99.1", AppIdentity.toWindowsMsiVersion("1.0.0-rc.1"));
+        assertEquals("0.99.2", AppIdentity.toWindowsMsiVersion("1.0.0-rc.2"));
+        assertEquals("1.0.0", AppIdentity.toWindowsMsiVersion("1.0.0"));
+        assertEquals("1.0.1", AppIdentity.toWindowsMsiVersion("1.0.1"));
+        assertEquals("0.1.rc.1", AppIdentity.toRpmRelease("1.0.0-rc.1"));
+        assertEquals("0.2.rc.2", AppIdentity.toRpmRelease("1.0.0-rc.2"));
+        assertEquals("1", AppIdentity.toRpmRelease("1.0.0"));
     }
 
     @Test

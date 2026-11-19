@@ -5,10 +5,12 @@ $ErrorActionPreference = "Stop"
 $ProductName = "morfia"
 $DisplayName = "Morfia"
 $SemVerVersion = "1.0.0-rc.1"
-$JPackageVersion = "1.0.0"
+# MSI/EXE upgrade ordering: 0.99.1 (rc.1) < 0.99.2 (rc.2) < 1.0.0 (final)
+$JPackageVersion = "0.99.1"
 $MainClass = "com.ffmpegstudio.ui.Launcher"
 $MainJar = "morfia-$SemVerVersion.jar"
 $Vendor = "Emerson Vinicius Santos de Santana"
+$UpgradeUuid = "7f4e9b6c-2e1a-4c9a-9f8e-3d5c6b7a8e91"
 
 $RootDir = (Resolve-Path "$PSScriptRoot\..\..").Path
 $DistDir = Join-Path $RootDir "dist\$SemVerVersion\windows-x64"
@@ -29,7 +31,9 @@ if (Test-Path $IconIco) {
     $IconArgs = @("--icon", $IconIco)
 }
 
-Write-Host "[1/3] Building Windows app-image..."
+Write-Host "[1/4] Building Windows app-image..."
+$AppImageDest = Join-Path $DistDir "app-image"
+if (Test-Path $AppImageDest) { Remove-Item $AppImageDest -Recurse -Force }
 jpackage `
   --type app-image `
   --name $DisplayName `
@@ -38,18 +42,19 @@ jpackage `
   --input $StageDir `
   --main-jar $MainJar `
   --main-class $MainClass `
-  --dest (Join-Path $DistDir "app-image") `
+  --dest $AppImageDest `
   @IconArgs
 
-Copy-Item (Join-Path $RootDir "LICENSE") (Join-Path $DistDir "app-image\$DisplayName\") -Force
-Copy-Item (Join-Path $RootDir "THIRD_PARTY_NOTICES.md") (Join-Path $DistDir "app-image\$DisplayName\") -Force
+Copy-Item (Join-Path $RootDir "LICENSE") (Join-Path $AppImageDest "$DisplayName\") -Force
+Copy-Item (Join-Path $RootDir "THIRD_PARTY_NOTICES.md") (Join-Path $AppImageDest "$DisplayName\") -Force
 
-Write-Host "[2/3] Creating portable ZIP..."
+Write-Host "[2/4] Creating portable ZIP..."
 $ZipPath = Join-Path $DistDir "$ProductName-$SemVerVersion-windows-x64.zip"
-Compress-Archive -Path (Join-Path $DistDir "app-image\$DisplayName\*") -DestinationPath $ZipPath -Force
+Compress-Archive -Path (Join-Path $AppImageDest "$DisplayName\*") -DestinationPath $ZipPath -Force
 
-if (Get-Command "wix.exe" -ErrorAction SilentlyContinue -or Get-Command "candle.exe" -ErrorAction SilentlyContinue) {
-    Write-Host "[3/3] Building Windows EXE and MSI installers..."
+$HasWix = (Get-Command "wix.exe" -ErrorAction SilentlyContinue) -or (Get-Command "candle.exe" -ErrorAction SilentlyContinue)
+if ($HasWix) {
+    Write-Host "[3/4] Building Windows EXE installer..."
     jpackage `
       --type exe `
       --name $DisplayName `
@@ -60,10 +65,33 @@ if (Get-Command "wix.exe" -ErrorAction SilentlyContinue -or Get-Command "candle.
       --main-class $MainClass `
       --dest $DistDir `
       --license-file (Join-Path $RootDir "LICENSE") `
+      --win-upgrade-uuid $UpgradeUuid `
+      --win-dir-chooser `
+      --win-menu `
+      --win-shortcut `
+      @IconArgs
+
+    Write-Host "[4/4] Building Windows MSI installer..."
+    jpackage `
+      --type msi `
+      --name $DisplayName `
+      --app-version $JPackageVersion `
+      --vendor $Vendor `
+      --input $StageDir `
+      --main-jar $MainJar `
+      --main-class $MainClass `
+      --dest $DistDir `
+      --license-file (Join-Path $RootDir "LICENSE") `
+      --win-upgrade-uuid $UpgradeUuid `
       --win-dir-chooser `
       --win-menu `
       --win-shortcut `
       @IconArgs
 } else {
-    Write-Host "[3/3] WiX Toolset not found; skipping EXE/MSI installer generation."
+    Write-Host "[3/4] WiX Toolset not found; skipping EXE/MSI installer generation."
 }
+
+Get-ChildItem -Path $DistDir -File | Where-Object { $_.Extension -in ".zip", ".exe", ".msi" } | ForEach-Object {
+    $hash = (Get-FileHash -Path $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+    "$hash  $($_.Name)"
+} | Set-Content -Path (Join-Path $DistDir "SHA256SUMS.txt") -Encoding UTF8
