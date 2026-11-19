@@ -33,7 +33,9 @@ jobs:
           cache: maven
 
       - name: Build JAR and Runtime Dependencies
-        run: mvn -B clean package -DskipTests dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=target/deps
+        run: |
+          mvn -B clean package -DskipTests
+          mvn -B org.apache.maven.plugins:maven-dependency-plugin:3.8.1:copy-dependencies -DincludeScope=runtime -DoutputDirectory=target/deps
 
       - name: Package Linux (tar.gz / deb)
         if: runner.os == 'Linux'

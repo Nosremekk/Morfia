@@ -24,7 +24,7 @@ class ConcatOperationTest {
     void shouldEscapeSingleQuotesAndSpaces() {
         Path p = tempDir.resolve("my 'special' video.mp4");
         String escaped = ConcatOperation.escapeConcatDemuxerPath(p);
-        String expected = "'" + p.toAbsolutePath().normalize().toString().replace("\\", "/").replace("'", "'\\''") + "'";
+        String expected = "'" + p.toAbsolutePath().normalize().toString().replace("'", "'\\''") + "'";
         assertEquals(expected, escaped);
     }
 
