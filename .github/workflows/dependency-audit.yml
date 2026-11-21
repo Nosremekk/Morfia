@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   sbom-and-audit:
-    name: Generate CycloneDX SBOM & Dependency Tree
+    name: Generate CycloneDX SBOM & CVE Vulnerability Audit
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
@@ -29,7 +29,25 @@ jobs:
       - name: Generate CycloneDX SBOM
         run: mvn -B org.cyclonedx:cyclonedx-maven-plugin:2.9.0:makeAggregateBom
 
-      - name: Upload SBOM & Dependency Audit
+      - name: Run Trivy Vulnerability Scan on CycloneDX SBOM
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: 'sbom'
+          scan-ref: 'target/bom.json'
+          format: 'table'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: Save Trivy JSON Report
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: 'sbom'
+          scan-ref: 'target/bom.json'
+          format: 'json'
+          output: 'target/trivy-sbom-report.json'
+          exit-code: '0'
+
+      - name: Upload SBOM & Vulnerability Reports
         uses: actions/upload-artifact@v4
         with:
           name: sbom-and-dependencies
@@ -37,4 +55,5 @@ jobs:
             target/bom.json
             target/bom.xml
             target/dependency-tree.txt
+            target/trivy-sbom-report.json
           if-no-files-found: warn
