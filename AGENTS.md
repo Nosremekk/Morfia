@@ -127,3 +127,10 @@ Para que uma fase ou funcionalidade seja considerada pronta:
 3. A funcionalidade visual (FXML/CSS) possui layout responsivo e aderente ao tema escuro.
 4. Toda execução de linha de comando é estruturada em lista de argumentos.
 5. Os documentos relevantes em `docs/` são atualizados.
+
+---
+
+## 6. Marcos do Projeto
+
+- **Fase 6.19 (Concluída em 21/11/2026)**: Publicação oficial da primeira Release Candidate (`v1.0.0-rc.1`) no GitHub ([Release v1.0.0-rc.1](https://github.com/Nosremekk/Morfia/releases/tag/v1.0.0-rc.1)). Tag anotada `v1.0.0-rc.1` apontando para o commit de origem dos binários `ba370c1831bc97f7af2e76561095d591a3709fac`. 6 artefatos binários (3 Linux, 3 Windows) + `SHA256SUMS` publicados, zero CVEs no Trivy, 106 testes aprovados.
+
