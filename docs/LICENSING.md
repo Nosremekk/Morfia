@@ -15,9 +15,9 @@ Conforme decisão **KD-002**, o código-fonte autoral deste projeto é licenciad
 A adoção da licença MIT no código autoral não altera as licenças das bibliotecas de terceiros utilizadas em compilação, runtime ou empacotamento. Consulte o inventário completo em [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md):
 
 - **OpenJDK 25 / JavaFX 24:** GPL-2.0 with Classpath Exception
-- **Jackson 2.18.2:** Apache-2.0
+- **Jackson 2.18.11:** Apache-2.0
 - **SLF4J 2.0.16:** MIT
-- **Logback 1.5.16:** EPL-1.0 / LGPL-2.1
+- **Logback 1.5.34:** EPL-1.0 / LGPL-2.1
 - **JUnit 5 / Mockito / AssertJ (escopo `test`):** EPL-2.0, MIT, Apache-2.0
 
 Todo pacote distribuível gerado via `jpackage` inclui obrigatoriamente os arquivos `LICENSE` e `THIRD_PARTY_NOTICES.md`.

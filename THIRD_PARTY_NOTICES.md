@@ -12,9 +12,9 @@ Este documento lista as dependências de terceiros utilizadas pelo **Morfia**, s
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **OpenJDK / Java Runtime** | 25 | GPL-2.0 with Classpath Exception | https://openjdk.org/ | Runtime JVM e módulos base empacotados via `jlink`/`jpackage` | Incluir texto GPL-2.0 + Classpath Exception nos instaladores que embutem runtime |
 | **JavaFX (`javafx-base`, `javafx-controls`, `javafx-fxml`, `javafx-graphics`)** | 24 | GPL-2.0 with Classpath Exception | https://openjfx.io/ | Interface gráfica desktop, FXML e CSS | Incluir aviso de copyright OpenJFX e GPL-2.0 + Classpath Exception |
-| **Jackson (`jackson-databind`, `jackson-datatype-jsr310`, `jackson-core`, `jackson-annotations`)** | 2.18.2 | Apache-2.0 | https://github.com/FasterXML/jackson | Serialização/desserialização JSON (configurações, presets, fila/histórico, FFprobe) | Preservar aviso de copyright e texto da licença Apache-2.0 (e arquivo NOTICE quando aplicável) |
+| **Jackson (`jackson-databind`, `jackson-datatype-jsr310`, `jackson-core`, `jackson-annotations`)** | 2.18.11 | Apache-2.0 | https://github.com/FasterXML/jackson | Serialização/desserialização JSON (configurações, presets, fila/histórico, FFprobe) | Preservar aviso de copyright e texto da licença Apache-2.0 (e arquivo NOTICE quando aplicável) |
 | **SLF4J (`slf4j-api`)** | 2.0.16 | MIT | https://www.slf4j.org/ | Facade de logging | Preservar aviso de copyright e licença MIT |
-| **Logback (`logback-classic`, `logback-core`)** | 1.5.16 | EPL-1.0 / LGPL-2.1 (dual) | https://logback.qos.ch/ | Implementação local de logs em arquivo/console | Incluir aviso EPL-1.0 / LGPL-2.1 |
+| **Logback (`logback-classic`, `logback-core`)** | 1.5.34 | EPL-1.0 / LGPL-2.1 (dual) | https://logback.qos.ch/ | Implementação local de logs em arquivo/console | Incluir aviso EPL-1.0 / LGPL-2.1 |
 
 ---
 
