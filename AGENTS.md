@@ -1,12 +1,12 @@
-# FFmpeg Studio — Diretrizes para Agentes de Desenvolvimento
+# Morfia — Diretrizes para Agentes de Desenvolvimento
 
-Este documento estabelece as convenções, regras arquiteturais, comandos de automação e critérios de qualidade para agentes de IA e desenvolvedores que colaboram no projeto **FFmpeg Studio**.
+Este documento estabelece as convenções, regras arquiteturais, comandos de automação e critérios de qualidade para agentes de IA e desenvolvedores que colaboram no projeto **Morfia** (anteriormente denominado provisoriamente FFmpeg Studio).
 
 ---
 
 ## 1. Visão Geral do Projeto
 
-**FFmpeg Studio** é uma aplicação desktop desenvolvida em Java 25 e JavaFX que fornece uma interface gráfica moderna, de alta produtividade e local-first para o ecossistema multimídia do FFmpeg e FFprobe.
+**Morfia** é uma aplicação desktop desenvolvida em Java 25 e JavaFX que fornece uma interface gráfica moderna, de alta produtividade e local-first para o ecossistema multimídia do FFmpeg e FFprobe.
 
 ### Princípios Cardeais
 - **Local-first e 100% Offline**: Sem backends remotos, sem telemetria externa, sem dependência de internet.
