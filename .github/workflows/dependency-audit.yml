@@ -29,23 +29,12 @@ jobs:
       - name: Generate CycloneDX SBOM
         run: mvn -B org.cyclonedx:cyclonedx-maven-plugin:2.9.0:makeAggregateBom
 
-      - name: Run Trivy Vulnerability Scan on CycloneDX SBOM
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          scan-type: 'sbom'
-          scan-ref: 'target/bom.json'
-          format: 'table'
-          exit-code: '0'
-          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
-
-      - name: Save Trivy JSON Report
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          scan-type: 'sbom'
-          scan-ref: 'target/bom.json'
-          format: 'json'
-          output: 'target/trivy-sbom-report.json'
-          exit-code: '0'
+      - name: Install Trivy and Scan CycloneDX SBOM
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
+          trivy --version
+          trivy sbom target/bom.json --format table --severity CRITICAL,HIGH,MEDIUM,LOW
+          trivy sbom target/bom.json --format json --output target/trivy-sbom-report.json
 
       - name: Upload SBOM & Vulnerability Reports
         uses: actions/upload-artifact@v4

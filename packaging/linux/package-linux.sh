@@ -34,20 +34,18 @@ fi
 
 RUNTIME_ARGS=()
 JAVA_HOME_DETECTED="${JAVA_HOME:-/usr/lib/jvm/java-25-openjdk}"
+MODULES="java.base,java.desktop,java.logging,java.management,java.naming,java.net.http,java.prefs,java.scripting,java.sql,java.xml,jdk.unsupported"
+rm -rf "${ROOT_DIR}/target/runtime"
 if [ -d "${JAVA_HOME_DETECTED}/jmods" ]; then
-  echo "[info] Building modular Java 25 runtime via jlink..."
-  rm -rf "${ROOT_DIR}/target/runtime"
-  jlink \
-    --module-path "${JAVA_HOME_DETECTED}/jmods" \
-    --add-modules java.base,java.desktop,java.logging,java.management,java.naming,java.net.http,java.prefs,java.scripting,java.sql,java.xml,jdk.unsupported \
-    --strip-debug \
-    --no-man-pages \
-    --no-header-files \
-    --compress=zip-6 \
-    --output "${ROOT_DIR}/target/runtime"
+  echo "[info] Building modular Java 25 runtime via jlink (jmods)..."
+  jlink --module-path "${JAVA_HOME_DETECTED}/jmods" --add-modules "${MODULES}" --strip-debug --no-man-pages --no-header-files --compress=zip-6 --output "${ROOT_DIR}/target/runtime"
+  RUNTIME_ARGS=(--runtime-image "${ROOT_DIR}/target/runtime")
+elif jlink --add-modules "${MODULES}" --strip-debug --no-man-pages --no-header-files --compress=zip-6 --output "${ROOT_DIR}/target/runtime" >/dev/null 2>&1; then
+  echo "[info] Building modular Java 25 runtime via jlink (JEP 493)..."
   RUNTIME_ARGS=(--runtime-image "${ROOT_DIR}/target/runtime")
 elif [ -d "${JAVA_HOME_DETECTED}" ]; then
-  echo "[info] jmods not found at ${JAVA_HOME_DETECTED}/jmods; using --runtime-image ${JAVA_HOME_DETECTED}"
+  echo "[info] jlink runtime-image fallback; using --runtime-image ${JAVA_HOME_DETECTED}"
+  rm -rf "${ROOT_DIR}/target/runtime"
   RUNTIME_ARGS=(--runtime-image "${JAVA_HOME_DETECTED}")
 fi
 
